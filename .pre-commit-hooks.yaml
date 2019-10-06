@@ -1,0 +1,6 @@
+- id: forbid-commits-hook
+  name: Check forbidden branch
+  description: Prevent accidental commits in a specified list of branches
+  entry: forbid-commits-hook
+  language: python
+  pass_filenames: false
