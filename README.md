@@ -18,7 +18,7 @@ Add this to your `.pre-commit-config.yaml` file under the `repos` key:
 
 ```
 - repo: https://github.com/PaperNick/pre-commit-forbidden-branches
-  rev: 0.0.1
+  rev: 0.1.0
   hooks:
   - id: forbid-commits-hook
     args: ['master']

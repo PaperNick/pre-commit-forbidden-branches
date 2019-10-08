@@ -21,9 +21,14 @@ def get_git_dir() -> str:
 
 
 def get_current_branch() -> str:
-    branch_name = subprocess.check_output(
-        ["git", "symbolic-ref", "--short", "HEAD"]
-    )
+    try:
+        branch_name = subprocess.check_output(
+            ["git", "symbolic-ref", "--quiet", "--short", "HEAD"]
+        )
+    except subprocess.CalledProcessError:
+        # This command will return a non-zero
+        # exit status code if HEAD is detached
+        return ""
     return branch_name.decode(sys.stdout.encoding).strip()
 
 
