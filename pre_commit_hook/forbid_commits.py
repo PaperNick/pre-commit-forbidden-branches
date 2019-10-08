@@ -1,6 +1,7 @@
 import argparse
 import os
 import subprocess
+import sys
 
 
 success_code = 0
@@ -10,9 +11,9 @@ error_code = 1
 def get_project_root_dir() -> str:
     # TODO: Test on windows
     project_dir = subprocess.check_output(
-        ["git", "rev-parse", "--show-toplevel"], text=True
+        ["git", "rev-parse", "--show-toplevel"]
     )
-    return project_dir.strip()
+    return project_dir.decode(sys.stdout.encoding).strip()
 
 
 def get_git_dir() -> str:
@@ -21,9 +22,9 @@ def get_git_dir() -> str:
 
 def get_current_branch() -> str:
     branch_name = subprocess.check_output(
-        ["git", "symbolic-ref", "--short", "HEAD"], text=True
+        ["git", "symbolic-ref", "--short", "HEAD"]
     )
-    return branch_name.strip()
+    return branch_name.decode(sys.stdout.encoding).strip()
 
 
 def is_merge_in_progress(project_dir="", git_dir="") -> bool:
