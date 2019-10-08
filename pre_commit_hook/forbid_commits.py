@@ -45,12 +45,7 @@ def main(argv=None) -> int:
         description="Prevent commits in the specified branches",
         allow_abbrev=False,
     )
-    parser.add_argument(
-        "forbidden_branches",
-        type=str,
-        nargs="*",
-        default=["master"],
-    )
+    parser.add_argument("forbidden_branches", type=str, nargs="*", default=[])
     args = parser.parse_args(argv)
 
     branch_name = get_current_branch()
