@@ -2,22 +2,21 @@ import argparse
 import os
 import subprocess
 import sys
+from pathlib import Path
 
 
 success_code = 0
 error_code = 1
 
 
-def get_project_root_dir() -> str:
+def get_project_root() -> Path:
     # TODO: Test on windows
-    project_dir = subprocess.check_output(
-        ["git", "rev-parse", "--show-toplevel"]
-    )
-    return project_dir.decode(sys.stdout.encoding).strip()
+    project_dir = subprocess.check_output(["git", "rev-parse", "--show-toplevel"])
+    return Path(project_dir.decode(sys.stdout.encoding).strip())
 
 
-def get_git_dir() -> str:
-    return os.environ.get("GIT_DIR", ".git")
+def get_git_dir() -> Path:
+    return Path(os.environ.get("GIT_DIR", ".git"))
 
 
 def get_current_branch() -> str:
@@ -32,17 +31,18 @@ def get_current_branch() -> str:
     return branch_name.decode(sys.stdout.encoding).strip()
 
 
-def is_merge_in_progress(project_dir="", git_dir="") -> bool:
+def is_merge_in_progress(project_dir: Path = None, git_dir: Path = None) -> bool:
     """
     Determine whether a git merge is in progress.
     """
-    if not project_dir:
-        project_dir = get_project_root_dir()
+    if project_dir is None:
+        project_dir = get_project_root()
 
-    if not git_dir:
+    if git_dir is None:
         git_dir = get_git_dir()
 
-    return os.path.isfile(os.path.join(project_dir, git_dir, "MERGE_HEAD"))
+    merge_head = project_dir / git_dir / Path("MERGE_HEAD")
+    return merge_head.is_file()
 
 
 def main(argv=None) -> int:
