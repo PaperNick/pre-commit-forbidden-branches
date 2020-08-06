@@ -3,6 +3,7 @@ import os
 import subprocess
 import sys
 from pathlib import Path
+from typing import List
 
 
 success_code = 0
@@ -10,7 +11,6 @@ error_code = 1
 
 
 def get_project_root() -> Path:
-    # TODO: Test on windows
     project_dir = subprocess.check_output(["git", "rev-parse", "--show-toplevel"])
     return Path(project_dir.decode(sys.stdout.encoding).strip())
 
@@ -32,9 +32,6 @@ def get_current_branch() -> str:
 
 
 def is_merge_in_progress(project_dir: Path = None, git_dir: Path = None) -> bool:
-    """
-    Determine whether a git merge is in progress.
-    """
     if project_dir is None:
         project_dir = get_project_root()
 
@@ -43,6 +40,17 @@ def is_merge_in_progress(project_dir: Path = None, git_dir: Path = None) -> bool
 
     merge_head = project_dir / git_dir / Path("MERGE_HEAD")
     return merge_head.is_file()
+
+
+def is_commit_allowed(branch_name: str, forbidden_branches: List[str]) -> bool:
+    if is_merge_in_progress():
+        # Do not interrupt the merge in progress
+        return True
+
+    if branch_name in forbidden_branches:
+        return False
+
+    return True
 
 
 def main(argv=None) -> int:
@@ -54,12 +62,7 @@ def main(argv=None) -> int:
     parser.add_argument("forbidden_branches", type=str, nargs="*", default=[])
     args = parser.parse_args(argv)
 
-    branch_name = get_current_branch()
-    if branch_name in args.forbidden_branches:
-        if is_merge_in_progress():
-            # Do not interrupt the merge in progress
-            return success_code
-
+    if not is_commit_allowed(get_current_branch(), args.forbidden_branches):
         print("You are not allowed to commit in this branch.")
         return error_code
 
