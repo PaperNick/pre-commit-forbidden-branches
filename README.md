@@ -1,5 +1,7 @@
 # Pre-commit hook to forbid commits
 
+[![Test Status](https://github.com/papernick/pre-commit-forbidden-branches/workflows/CI/badge.svg)](https://github.com/PaperNick/pre-commit-forbidden-branches/actions)
+
 The purpose of this pre-commit hook is to prevent accidental commits in a specified list of branches, e.g. `master`, `develop`, etc.
 
 
