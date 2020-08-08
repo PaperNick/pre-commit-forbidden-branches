@@ -21,7 +21,7 @@ def get_git_dir() -> Path:
 
 def get_current_branch() -> str:
     try:
-        branch_name = subprocess.check_output(
+        branch_name: bytes = subprocess.check_output(
             ["git", "symbolic-ref", "--quiet", "--short", "HEAD"]
         )
     except subprocess.CalledProcessError:
@@ -31,14 +31,11 @@ def get_current_branch() -> str:
     return branch_name.decode(sys.stdout.encoding).strip()
 
 
-def is_merge_in_progress(project_dir: Path = None, git_dir: Path = None) -> bool:
-    if project_dir is None:
-        project_dir = get_project_root()
+def is_merge_in_progress(git_dir_absolute: Path = None) -> bool:
+    if git_dir_absolute is None:
+        git_dir_absolute = get_project_root() / get_git_dir()
 
-    if git_dir is None:
-        git_dir = get_git_dir()
-
-    merge_head = project_dir / git_dir / Path("MERGE_HEAD")
+    merge_head = git_dir_absolute / Path("MERGE_HEAD")
     return merge_head.is_file()
 
 

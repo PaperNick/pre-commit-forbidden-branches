@@ -58,5 +58,5 @@ pip install -r requirements_dev.txt
 Run the tests:
 
 ```
-py.test --cov pre_commit_hook tests/
+python -m pytest tests/ --cov pre_commit_hook/
 ```
