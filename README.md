@@ -20,7 +20,7 @@ Add this to your `.pre-commit-config.yaml` file under the `repos` key:
 
 ```
 - repo: https://github.com/PaperNick/pre-commit-forbidden-branches
-  rev: 0.2.0
+  rev: 0.3.0
   hooks:
   - id: forbid-commits-hook
     args: ['master']
