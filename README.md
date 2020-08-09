@@ -62,3 +62,7 @@ Run the tests:
 ```
 python -m pytest tests/ --cov pre_commit_hook/
 ```
+
+```
+bash tests/integration/run.sh
+```
